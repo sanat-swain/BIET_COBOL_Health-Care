@@ -1,0 +1,156 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. Health-Care.
+        AUTHOR. CKUMARESAN.
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        INPUT-OUTPUT SECTION.
+        FILE-CONTROL.
+                SELECT IN-FILE ASSIGN TO DISK
+                ORGANIZATION IS LINE SEQUENTIAL.
+                SELECT OUT-FILE ASSIGN TO DISK
+                ORGANIZATION IS LINE SEQUENTIAL.
+        DATA DIVISION.
+        FILE SECTION.
+        		   FD      IN-FILE
+                LABEL RECORDS ARE STANDARD
+                VALUE OF FILE-ID IS "Med.In".
+        01      IN-REC.
+                02      EMPID          		 PIC     X(6).
+                02      EMPNAME       		 PIC     X(20).
+                02      CADRE           		 PIC     X(3).
+                02      DEPARTMENT     PIC     X(20).
+                02      DESIGNATION     PIC     X(20).
+       FD       OUT-FILE
+                LABEL RECORDS ARE STANDARD
+                VALUE OF FILE-ID IS "Med.Out".
+       01       OUT-REC                 		 PIC     X(120).
+       WORKING-STORAGE SECTION.
+       77       SNO             		 PIC     		 9(4) 		 VALUE ZERO.
+       77       OP              		 PIC     		 9(8) 		 VALUE ZERO.
+       77       IP              		 PIC     		 9(8) 		 VALUE ZERO.
+       77       SELF        		 		 PIC     		 9(8) 		 VALUE ZERO.
+       77       DEPENDANT   		 		 PIC     		 9(8) 		 VALUE ZERO.
+
+       01       HEAD-LINE.
+                02      F PIC   X(80)   VALUE ALL "~".
+       01       HEAD-SPACE.
+                02      F PIC   X(80)   VALUE ALL " ".
+       01       HEAD-1.
+                02      F PIC   X(28)   VALUE SPACES.
+                02      F PIC   X(23)   VALUE "CKUMS  MOTOR INDIA LTD".
+       01      HEAD-2.
+                02      F PIC   X(31)   VALUE SPACE.
+                02      F PIC   X(18)   VALUE "HEALTH CARE SCHEME".
+       01      HEAD-3.
+                02      F PIC   X(28)   VALUE SPACES.
+                02      F PIC   X(24) VALUE "MEDICAL COVERAGE DETAILS".
+       01      HEAD-4.
+                02      F PIC   X(1)    VALUE SPACES.
+                02      F PIC   X(4)    VALUE "S.No".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(6)    VALUE "EMP.ID".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(14)   VALUE "EMP.NAME".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(5)    VALUE "CADRE".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(15)   VALUE "DESIGNATION".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(15)   VALUE "DEPARTMENT".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(6)    VALUE "FOR OP".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(6)    VALUE "FOR IP".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(8)    VALUE "SELF".
+                02      F PIC   X(2)    VALUE SPACES.
+                02      F PIC   X(13)   VALUE "DEPENDANT".
+        01      OUTPUT-VALUE.
+                02      F               PIC     X(2)    		 VALUE SPACES.
+                02      SNO-O           PIC     X(2).
+                02      F               PIC     X(2)    		 VALUE SPACES.
+                02      EMPID-O         PIC     X(6).
+                02      F               PIC     X(2)    		 VALUE SPACES.
+                02      EMPNAME-O       PIC     X(15).
+                02      F               PIC     X(2)    		 VALUE SPACES.
+                02      CADRE-O         PIC     X(3).
+                02      F               PIC     X(2)    		 VALUE SPACES.
+                02      DESIGNATION-O   PIC     X(15).
+                02      F               PIC     X(2)    		 VALUE SPACES.
+                02      DEPARTMENT-O    PIC     X(15).
+                02      F               PIC     X(2) 		 		 VALUE SPACES.
+                02      OP-O            PIC     ZZZZ.ZZ.
+                02      F               PIC     X(2) 		 		 VALUE SPACES.
+                02      IP-O            PIC     ZZZZZZ.ZZ.
+                02      F               PIC     X(2) 		 		 VALUE SPACES.
+                02      SELF-O          PIC     ZZZZZZ.ZZ.
+                02      F               PIC     X(2) 		 		 VALUE SPACES.
+                02      DEPENDANT-O     PIC     ZZZZZZ.ZZ.
+
+       77       OPT                     PIC     X.
+
+       PROCEDURE DIVISION.
+       MENU-PARA.
+                DISPLAY (1 1) ERASE.
+                DISPLAY (3 12) "MENU".
+                DISPLAY (5 15) "C FOR CREARATION".
+                DISPLAY (7 15) "P FOR PROCESS".
+                DISPLAY (9 15) "ENTER YOUR CHOICE <C/P>"
+                ACCEPT (9 45) OPT.
+                IF OPT = "C" OR OPT = "c" GO TO CREATE-PARA.
+                IF OPT = "P" OR OPT = "p" GO TO PROCESS-PARA.
+                IF OPT = "Q" OR OPT = "q" GO TO CLOSE-PARA.
+        CREATE-PARA.
+                OPEN OUTPUT IN-FILE.
+        INPUT-PARA.
+                DISPLAY (1 1) ERASE.
+                DISPLAY (5 5) "EMPLOYEE ID      : ".
+                DISPLAY (7 5) "EMPLOYEE NAME    : ".
+                DISPLAY (9 5) "CADRE            : ".
+                DISPLAY (11 5) "DESIGNATION     : ".
+                DISPLAY (13 5) "DEPARTMENT      : ".
+                ACCEPT (5 35) EMPID.
+                ACCEPT (7 35) EMPNAME.
+                ACCEPT (9 35) CADRE.
+                ACCEPT (11 35) DESIGNATION.
+                ACCEPT (13 35) DEPARTMENT.
+                WRITE IN-REC.
+                DISPLAY (20 20) "WANT TO ADD ONE MORE <Y/N>? ".
+                ACCEPT (20 60) OPT.
+                IF OPT = "Y" OR OPT = "y" GO TO INPUT-PARA.
+                CLOSE IN-FILE.
+                GO TO MENU-PARA.
+         PROCESS-PARA.
+                OPEN INPUT IN-FILE OUTPUT OUT-FILE.
+         WRITE-PARA.
+                WRITE OUT-REC FROM HEAD-1.
+                WRITE OUT-REC FROM HEAD-2.
+                WRITE OUT-REC FROM HEAD-3.
+                WRITE OUT-REC FROM HEAD-LINE.
+                WRITE OUT-REC FROM HEAD-4.
+                WRITE OUT-REC FROM HEAD-LINE.
+         READ-PARA.
+                READ IN-FILE AT END GO TO CLOSE-PARA.
+         CALC-PARA.
+                IF CADRE = "EXE" MOVE 150000 TO IP-O.
+                IF CADRE = "NEX" OR CADRE = "JEX" MOVE 100000 TO IP-O.
+                MOVE 5000 TO OP-O.
+                IF CADRE = "EXE"
+                        MOVE 75000 TO SELF-O
+                        MOVE 50000 TO DEPENDANT-O.
+                IF CADRE ="JEX" OR CADRE = "NEX"
+                        MOVE 40000 TO SELF-O
+                        MOVE 30000 TO DEPENDANT-O.
+                COMPUTE SNO = SNO + 1.
+                MOVE SNO TO SNO-O.
+                MOVE EMPID TO EMPID-O.
+                MOVE EMPNAME TO EMPNAME-O.
+                MOVE CADRE TO CADRE-O.
+                MOVE DESIGNATION TO DESIGNATION-O.
+                MOVE DEPARTMENT TO DEPARTMENT-O.
+                WRITE OUT-REC FROM OUTPUT-VALUE.
+                GO TO READ-PARA.
+          CLOSE-PARA.
+                WRITE OUT-REC FROM HEAD-LINE.
+                CLOSE IN-FILE , OUT-FILE.
+                STOP RUN.

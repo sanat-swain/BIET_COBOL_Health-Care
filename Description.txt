@@ -1,0 +1,4 @@
+This program is written for Health Care for a company
+employees. The Coverage limit is alloted based on the Cadre. The Cadre may
+be EXE or JEX or NEX. The Write and Read operation are written in a same
+program. The Output is stored in 'Med.out' file.
